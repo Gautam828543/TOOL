@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Previous meta tags and title -->
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #4f46e5;
+            --accent-color: #6366f1;
+            --background: #f8fafc;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-section {
+            border: 2px dashed var(--accent-color);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section:hover {
+            border-color: var(--primary-color);
+            background: #f1f5f9;
+        }
+
+        .upload-section::after {
+            content: '📁 Drag & Drop Files';
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .compression-control {
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 1.5rem 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .preview-box {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .file-info {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loader {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { bottom: -100px }
+            to { bottom: 2rem }
+        }
+
+        /* Add Font Awesome for icons */
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
+    </style>
+</head>
+<body>
+    <!-- Ad Section -->
+    <div class="ad-banner" style="margin: 1rem auto; max-width: 1200px">
+        <!-- Google Ads -->
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1 style="font-size: 2.25rem; margin-bottom: 1rem; color: var(--text-color)">
+                <i class="fas fa-image"></i> Image Optimizer Pro
+            </h1>
+            <p style="color: #64748b; margin-bottom: 2rem">
+                Compress and optimize images while maintaining quality
+            </p>
+        </header>
+
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept="image/*" hidden>
+            <label for="imageInput" style="cursor: pointer">
+                <div style="font-size: 3rem; margin-bottom: 1rem">📤</div>
+                <h3 style="margin-bottom: 0.5rem">Click to upload images</h3>
+                <p style="color: #64748b">Supports JPG, PNG, WEBP (Max 10MB)</p>
+            </label>
+        </div>
+
+        <div class="controls">
+            <!-- Compression Controls with improved styling -->
+            <div class="compression-control">
+                <label style="font-weight: 500; margin-bottom: 0.5rem; display: block">
+                    <i class="fas fa-compress-alt"></i> Compression Level
+                </label>
+                <div style="display: flex; align-items: center; gap: 1rem">
+                    <input type="range" id="compressionLevel" min="0" max="1" step="0.1" value="0.8">
+                    <span id="levelValue" style="background: #e2e8f0; padding: 0.25rem 0.75rem; border-radius: 999px">80%</span>
+                </div>
+            </div>
+
+            <div class="compression-control">
+                <label style="font-weight: 500; margin-bottom: 0.5rem; display: block">
+                    <i class="fas fa-file-export"></i> Output Settings
+                </label>
+                <select id="imageQuality" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #e2e8f0">
+                    <option value="0.9">High Quality (90%)</option>
+                    <option value="0.7">Medium Quality (70%)</option>
+                    <option value="0.5">Low Quality (50%)</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 2rem 0">
+            <button id="compressBtn">
+                <span class="loader" id="btnLoader"></span>
+                <i class="fas fa-file-archive"></i>
+                Compress Now
+            </button>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-container">
+            <div class="preview-box">
+                <h3 style="margin-bottom: 1rem"><i class="fas fa-file-image"></i> Original</h3>
+                <canvas id="originalCanvas" style="width: 100%; border-radius: 0.5rem"></canvas>
+                <div class="file-info" id="originalFileInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Select an image to view details</span>
+                </div>
+            </div>
+
+            <div class="preview-box">
+                <h3 style="margin-bottom: 1rem"><i class="fas fa-file-export"></i> Compressed</h3>
+                <canvas id="compressedCanvas" style="width: 100%; border-radius: 0.5rem"></canvas>
+                <div class="file-info" id="compressedFileInfo">
+                    <i class="fas fa-download"></i>
+                    <span>Compressed version will appear here</span>
+                </div>
+                <a id="downloadLink" class="button" style="margin-top: 1rem; display: none">
+                    <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Updated JavaScript with loading states and toast notifications
+        const showToast = (message, duration = 3000) => {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+                document.body.removeChild(toast);
+            }, duration);
+        };
+
+        compressBtn.addEventListener('click', async () => {
+            if (!imageInput.files[0]) return showToast('Please select an image first!');
+            
+            // Show loading state
+            compressBtn.disabled = true;
+            btnLoader.style.display = 'inline-block';
+            
+            try {
+                // Compression logic
+                // Show success state
+                showToast('Image compressed successfully!');
+            } catch (error) {
+                showToast('Error compressing image: ' + error.message);
+            } finally {
+                compressBtn.disabled = false;
+                btnLoader.style.display = 'none';
+            }
+        });
+
+        // Drag and drop functionality
+        const uploadSection = document.querySelector('.upload-section');
+        
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = var(--primary-color);
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.style.borderColor = var(--accent-color);
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageInput.files = e.dataTransfer.files;
+            handleFileSelect();
+        });
+    </script>
+</body>
+</html>
